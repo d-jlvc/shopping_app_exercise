@@ -62,13 +62,17 @@ def remove_product(file_name):
 
     #--Loading the products:
     products = function_files.load_file(file_name)
-    product_index = function_files.find_product_index(file_name, delete_product_id)
+    product_index = function_files.find_product_index(products, delete_product_id)
 
     if product_index > -1:
         del products[product_index]
-        print(f">>. ✅ - Product {products['name']} deleted!")
+        print(f">>. ✅ - Product {delete_product_id} deleted!")
+
+        #--Saving:
+        function_files.save_files(file_name, products)
     else:
         print(f">>. ⚠️ - Error! The product with ID:{delete_product_id} does not exist!")
+
 
 #--Function for updating products
 def update_products(file_name):
@@ -77,26 +81,26 @@ def update_products(file_name):
     function_files.store_functions.display_products(file_name)
     #--Input the ID of the product:
     print("-" * 50)
-    update_product_id = input(">>. Please enter ID of the product you want to change: ")
+    update_product_id = int(input(">>. Please enter ID of the product you want to change: "))
 
     #--Loading the products:
     products = function_files.load_file(file_name)
-    product_index = function_files.find_product_index(file_name, update_product_id)
+    product_index = function_files.find_product_index(products, update_product_id)
 
     #--Checking if product exists:
     if product_index > -1:
         print(f">>. You are updating a product with ID:{update_product_id}:")
 
-        product_name = input(f">>. Changing the name of {products['name']}: ")
-        product_quantity = input(f">>. Changing the quantity (old: {products['quantity']})")
-        product_price = input(f">>. Changing the price (old: {products['price']})")
+        product_name = input(f">>. Changing the name of {products[product_index]['name']}: ")
+        product_quantity = input(f">>. Changing the quantity (old: {products[product_index]['quantity']}): ")
+        product_price = input(f">>. Changing the price (old: {products[product_index]['price']}): ")
 
         if product_name.strip():
-            products['name'] = product_name
+            products[product_index]['name'] = product_name
         if product_quantity.strip():
-            products['quantity'] = int(product_quantity)
+            products[product_index]['quantity'] = int(product_quantity)
         if product_price.strip():
-            products['price'] = float(product_price)
+            products[product_index]['price'] = float(product_price)
 
         function_files.save_files(file_name, products)
         print("\n>>. 🎉 - Update succesful!")  
